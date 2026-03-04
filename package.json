@@ -21,7 +21,9 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"db:start": "docker compose up -d",
+    	"db:stop": "docker compose down"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
@@ -37,6 +39,7 @@
 		"@tailwindcss/vite": "^4.1.18",
 		"@types/node": "^24",
 		"@vitest/browser-playwright": "^4.0.18",
+		"dotenv": "^17.3.1",
 		"drizzle-kit": "^0.31.8",
 		"drizzle-orm": "^0.45.1",
 		"eslint": "^9.39.2",
