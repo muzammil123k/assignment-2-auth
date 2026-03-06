@@ -1,31 +1,8 @@
 <script lang="ts">
 	import { signIn } from '@auth/sveltekit/client';
-
-	let email = '';
-	let password = '';
-	let errorMessage = '';
-	let isLoading = false;
-
-	async function handleEmailLogin(event: Event) {
-		event.preventDefault();
-		isLoading = true;
-		errorMessage = '';
-
-		// Call Auth.js credentials provider
-		const response = await signIn('credentials', {
-			email,
-			password,
-			redirect: false,
-			callbackUrl: '/dashboard'
-		});
-
-		if (response?.error) {
-			errorMessage = 'Invalid email or password. Please try again.';
-			isLoading = false;
-		} else if (response?.url) {
-			window.location.href = response.url;
-		}
-	}
+	import type { ActionData } from './$types';
+	
+	export let form: ActionData; // Grabs errors from our new server file
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
@@ -36,32 +13,32 @@
 			</h2>
 		</div>
 
-		{#if errorMessage}
+		{#if form?.error}
 			<div class="rounded-md bg-red-50 p-4 text-sm text-red-700">
-				{errorMessage}
+				{form.error}
 			</div>
 		{/if}
 
-		<form class="mt-8 space-y-6" on:submit={handleEmailLogin}>
+		<form class="mt-8 space-y-6" method="POST" action="?/login">
 			<div class="-space-y-px rounded-md shadow-sm">
 				<div>
 					<label for="email" class="sr-only">Email address</label>
-					<input id="email" bind:value={email} type="email" required
+					<input id="email" name="email" type="email" required
 						class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
 						placeholder="Email address" />
 				</div>
 				<div>
 					<label for="password" class="sr-only">Password</label>
-					<input id="password" bind:value={password} type="password" required
+					<input id="password" name="password" type="password" required
 						class="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
 						placeholder="Password" />
 				</div>
 			</div>
 
 			<div>
-				<button type="submit" disabled={isLoading}
-					class="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400">
-					{isLoading ? 'Signing in...' : 'Sign in'}
+				<button type="submit"
+					class="group relative flex w-full justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+					Sign in
 				</button>
 			</div>
 		</form>

@@ -1,14 +1,18 @@
+import { AUTH_SECRET } from '$env/static/private';
 import { SvelteKitAuth } from '@auth/sveltekit';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '$lib/server/db';
 import { users, accounts, sessions, verificationTokens } from '$lib/server/db/schema';
+//import { AUTH_SECRET, GITHUB_ID, GITHUB_SECRET } from '$env/static/private';
+import { AUTH_SECRET, GITHUB_ID, GITHUB_SECRET, GOOGLE_ID, GOOGLE_SECRET } from '$env/static/private';
 import Credentials from '@auth/sveltekit/providers/credentials';
 import GitHub from '@auth/sveltekit/providers/github';
 import Google from '@auth/sveltekit/providers/google';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
-export const handle = SvelteKitAuth({
+export const { handle, signIn, signOut } = SvelteKitAuth({
+	secret: AUTH_SECRET,
 	adapter: DrizzleAdapter(db, {
 		usersTable: users,
 		accountsTable: accounts,
@@ -19,8 +23,14 @@ export const handle = SvelteKitAuth({
 		strategy: 'database'
 	},
 	providers: [
-		GitHub,
-		Google,
+		GitHub({
+			clientId: GITHUB_ID,
+			clientSecret: GITHUB_SECRET
+		}),
+		Google({
+			clientId: GOOGLE_ID,
+			clientSecret: GOOGLE_SECRET
+		}),
 		Credentials({
 			credentials: {
 				email: { label: 'Email', type: 'email' },
