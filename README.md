@@ -1,42 +1,80 @@
-# sv
+# Full-Stack Authentication & AI Dashboard
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**Author:** Muzammil Idrees
+**Project:** Assignment 2 - Authentication System
 
-## Creating a project
+A robust, full-stack SvelteKit application demonstrating advanced authentication, role-based access control (RBAC), secure email verification, and AI integration.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## ✨ Features
 
-```sh
-# create a new project
-npx sv create my-app
+* **Multi-Provider Authentication:** Secure login using custom Email/Password credentials, Google OAuth, and GitHub OAuth via Auth.js.
+* **Strict Verification Flow:** Users are blocked from logging in until they verify their email via a secure, expiring link sent via Nodemailer.
+* **Password Reset:** Complete self-service password reset pipeline with secure, temporary email tokens.
+* **Role-Based Access Control (RBAC):** Distinct `user` and `admin` roles, protected via SvelteKit server hooks and layout guards.
+* **Admin Dashboard:** Dedicated admin panel for managing users, tracking analytics, and modifying roles (e.g., suspending users).
+* **AI Integration:** Integrated Google Gemini AI chat interface.
+
+## 🛠️ Tech Stack
+
+* **Framework:** SvelteKit (Svelte 5)
+* **Database:** PostgreSQL (Containerized via Docker)
+* **ORM:** Drizzle ORM
+* **Authentication:** Auth.js (`@auth/sveltekit`)
+* **Styling:** Tailwind CSS
+* **Mailing:** Nodemailer (SMTP)
+* **AI:** Google Gemini API (`@ai-sdk/svelte`)
+
+## 🚀 Local Development Setup
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+* [Node.js](https://nodejs.org/) & [pnpm](https://pnpm.io/)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for the database)
+
+### 2. Environment Variables
+Create a `.env` file in the root directory and populate it with your credentials:
+
+```env
+# Database
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/assignment2"
+
+# Auth.js Configuration
+AUTH_SECRET="generate-a-random-secret-key"
+
+# OAuth Providers
+GITHUB_ID="your_github_client_id"
+GITHUB_SECRET="your_github_client_secret"
+GOOGLE_ID="your_google_client_id"
+GOOGLE_SECRET="your_google_client_secret"
+
+# Nodemailer Configuration (Use an App Password, not a standard account password)
+EMAIL_USER="your.email@gmail.com"
+EMAIL_PASS="your_16_character_app_password"
+
+# AI Integration
+GEMINI_API_KEY="your_google_gemini_api_key"
 ```
 
-To recreate this project with the same configuration:
+### 3. Start the Database
+Spin up the PostgreSQL instance using Docker:
 
-```sh
-# recreate this project
-pnpm dlx sv@0.12.4 create --template minimal --types ts --add prettier eslint vitest="usages:unit,component" playwright tailwindcss="plugins:typography" sveltekit-adapter="adapter:auto" devtools-json drizzle="database:postgresql+postgresql:postgres.js+docker:yes" mdsvex paraglide="languageTags:en, es+demo:no" storybook mcp="ide:claude-code+setup:local" --install pnpm assignment-2-auth
+```bash
+docker-compose up -d
 ```
 
-## Developing
+### 4. Install Dependencies & Push Schema
+Install the required packages and push the Drizzle schema to the database:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+pnpm install
+pnpm db:push
 ```
 
-## Building
+### 5. Run the Application
+Start the development server:
 
-To create a production version of your app:
-
-```sh
-npm run build
+```bash
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Navigate to http://localhost:5173 in your browser.
