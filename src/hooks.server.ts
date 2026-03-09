@@ -60,7 +60,8 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 				if (!passwordsMatch) {
 					return null; // Incorrect password
 				}
-
+				if (!user.emailVerified)
+					return null;
 				// 3. Login successful!
 				return user;
 			}

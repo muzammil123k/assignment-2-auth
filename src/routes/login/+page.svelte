@@ -66,8 +66,9 @@
 			</div>
 		</div>
 
-		<div class="text-center text-sm mt-4">
+		<div class="text-center text-sm mt-4 space-y-2">
 			<p class="text-gray-600">Don't have an account? <a href="/register" class="font-medium text-indigo-600 hover:text-indigo-500">Register here</a></p>
+			<p class="text-gray-600"><a href="/forgot-password" class="font-medium text-indigo-600 hover:text-indigo-500">Forgot your password?</a></p>
 		</div>
 	</div>
 </div>

@@ -27,7 +27,9 @@ export const actions: Actions = {
 		if (!isValid) {
 			return fail(400, { error: 'Invalid email or password.' });
 		}
-
+		if (!user.emailVerified) {
+            return fail(403, { error: 'Please check your email and verify your account before logging in.' });
+        }
 		// 3. Generate an Auth.js compatible session token
 		const sessionToken = crypto.randomUUID();
 		const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days

@@ -4,6 +4,9 @@ import { users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import type { Actions } from './$types';
+// 1. Import your new token and email utilities
+import { generateVerificationToken } from '$lib/server/tokens';
+import { sendVerificationEmail } from '$lib/server/email';
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -33,6 +36,9 @@ export const actions: Actions = {
 			password: hashedPassword,
 			role: 'user' // Default role
 		});
+		// 5. Generate the secure token and fire off the email!
+        const verificationToken = await generateVerificationToken(email);
+        await sendVerificationEmail(email, verificationToken.token);
 
 		// 5. Send them to the login page
 		throw redirect(303, '/login');
